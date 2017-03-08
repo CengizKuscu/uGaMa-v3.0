@@ -37,7 +37,6 @@ namespace uGaMa.Core
 
         public void Awake()
         {
-            Debug.Log("Controller Awake");
             _gameManager = GameManager.Instance;
             _dispatcher = _gameManager.Dispatcher;
             _commandMap = _gameManager.CommandMap;
@@ -51,10 +50,8 @@ namespace uGaMa.Core
             OnRemove();
         }
 
-        virtual public void OnRemove() { }
+        public virtual void OnRegister() {}
 
-        virtual public void OnRegister() {}
-
-
+        public virtual void OnRemove() {}
     }
 }

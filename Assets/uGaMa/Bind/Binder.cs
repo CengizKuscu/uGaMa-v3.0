@@ -25,7 +25,7 @@ namespace uGaMa.Bind
         {
             if (Bindings.ContainsKey(binding.Key))
             {
-                UnityEngine.Debug.Log("Key is already registered");
+                //UnityEngine.Debug.Log("Key is already registered");
             }
             else
             {

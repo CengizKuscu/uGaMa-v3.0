@@ -7,7 +7,7 @@ using UnityEngine;
 namespace uGaMa.Core
 {
     [ScriptOrder(-10001)]
-    internal partial class GameManager : Singleton<GameManager>
+    public partial class GameManager : Singleton<GameManager>
     {
         private DispatchManager _dispatcher;
         private CommandBinder _commandManager;

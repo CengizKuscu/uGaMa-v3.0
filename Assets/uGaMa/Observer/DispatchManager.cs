@@ -19,21 +19,17 @@ namespace uGaMa.Observer
 
         public void AddListener(IObserver obj, object dispatchKey, Action<ObserverParam> callBack)
         {
+            if(obj.DispatchKeys.Find(s=> s == dispatchKey) == null)
+            {
+                obj.DispatchKeys.Add(dispatchKey);
+            }
+
             if(!DispatchList.ContainsKey(dispatchKey))
             {
-
-                if (!obj.DispatchKeys().ContainsKey(dispatchKey))
-                {
-                    obj.DispatchKeys().Add(dispatchKey,dispatchKey);
-                }
                 DispatchList.Add(dispatchKey, new Dictionary<Action<ObserverParam>, IObserver> { { callBack, obj } });
             }
             else
             {
-                if (!obj.DispatchKeys().ContainsKey(dispatchKey))
-                {
-                    obj.DispatchKeys().Add(dispatchKey,dispatchKey);
-                }
                 DispatchList[dispatchKey].Add(callBack, obj);
             }
         }
@@ -42,34 +38,33 @@ namespace uGaMa.Observer
         {
             var actions = DispatchList[dispatchKey];
             if (actions == null) return;
-
-            foreach (var pair in actions)
+            for (int i = 0; i < actions.Count; i++)
             {
-                if (pair.Key == callback && pair.Value == obj)
+                if(actions.Keys.ElementAt(i) == callback && actions.Values.ElementAt(i) == obj)
                 {
-                    actions.Remove(pair.Key);
+                    actions.Remove(actions.Keys.ElementAt(i));
                 }
             }
-
             if (actions.Count == 0)
             {
                 DispatchList.Remove(dispatchKey);
             }
 
-            obj.DispatchKeys().Remove(dispatchKey);
+            obj.DispatchKeys.Remove(obj.DispatchKeys.Find(s => s == dispatchKey));
         }
 
         public void RemoveAllListeners(IObserver obj)
         {
-            foreach (var dispatchKey in obj.DispatchKeys())
+            foreach (var dispatchKey in obj.DispatchKeys)
             {
                 var actions = DispatchList[dispatchKey];
                 if (!actions.ContainsValue(obj)) continue;
-
-                foreach (var pair in actions)
+                for (int i = 0; i < actions.Count; i++)
                 {
-                    if(pair.Value != obj) continue;
-                    actions.Remove(pair.Key);
+                    if (actions.Values.ElementAt(i) == obj)
+                    {
+                        actions.Remove(actions.Keys.ElementAt(i));
+                    }
                 }
 
                 if(actions.Count == 0)
@@ -77,8 +72,7 @@ namespace uGaMa.Observer
                     DispatchList.Remove(dispatchKey);
                 }
             }
-
-            obj.DispatchKeys().Clear();
+            obj.DispatchKeys.Clear();
         }
 
         public void Dispatch(object dispatchKey, object dispatchParam, object dispatchMsg)

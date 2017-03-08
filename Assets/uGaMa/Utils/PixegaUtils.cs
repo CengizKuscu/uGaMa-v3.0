@@ -5,6 +5,22 @@ namespace uGaMa.Utils
 {
     public static class PixegaUtils
     {
+        public static string EncryptDecrypt(string str)
+        {
+            StringBuilder inSb = new StringBuilder(str);
+            StringBuilder outSb = new StringBuilder(str.Length);
+
+            char c;
+            for (int i = 0; i < str.Length; i++)
+            {
+                c = inSb[i];
+                c = (char)(c ^ 129);
+                outSb.Append(c);
+            }
+
+            return outSb.ToString();
+        }
+
         public static byte[] GetByteString (string str)
         {
             byte[] byteStr = Encoding.UTF8.GetBytes(str);

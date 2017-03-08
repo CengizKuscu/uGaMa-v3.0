@@ -6,7 +6,7 @@ namespace uGaMa.Observer
 {
     public interface IObserver
     {
-        Dictionary<object, object> DispatchKeys();
+        List<object> DispatchKeys { get; }
 
         void OnHandlerObserver(ObserverParam param, Action<ObserverParam> callBack);
     }

@@ -12,7 +12,11 @@ namespace uGaMa.Bind
 
         IBinding To<T>();
 
+        IBinding SingleRun();
+
         Dictionary<object, object> Binded { get; }
+
+        Dictionary<object, bool> SingleRunList { get; }
 
         object Key { get; }
     }

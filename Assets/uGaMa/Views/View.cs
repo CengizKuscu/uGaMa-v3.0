@@ -12,7 +12,7 @@ namespace uGaMa.Views
 
         DispatchManager _dispatcher;
 
-        Dictionary<object, object> dispatchKeys = new Dictionary<object, object>();
+        List<object> dispatchKeys = new List<object>();
 
         internal GameManager gameManager
         {
@@ -32,7 +32,6 @@ namespace uGaMa.Views
 
         public void Awake()
         {
-            Debug.Log("VIEW AWAKE");
             _gameManager = GameManager.Instance;
             _dispatcher = _gameManager.Dispatcher;
             OnRegister();
@@ -40,17 +39,22 @@ namespace uGaMa.Views
 
         public void OnDestroy()
         {
+            if (dispatchKeys.Count > 0)
+            {
+                Dispatcher.RemoveAllListeners(this);
+            }
             OnRemove();
-            _dispatcher.RemoveAllListeners(this);
         }
 
         public virtual void OnRegister() { }
         public virtual void OnRemove() { }
 
-
-        public Dictionary<object, object> DispatchKeys()
+        public List<object> DispatchKeys
         {
-            return dispatchKeys;
+            get
+            {
+                return dispatchKeys;
+            }
         }
 
         public void OnHandlerObserver(ObserverParam param, Action<ObserverParam> callBack)

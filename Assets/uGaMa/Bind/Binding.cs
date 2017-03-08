@@ -9,15 +9,19 @@ namespace uGaMa.Bind
         public Binding() : this(null)
         {
             Binded = new Dictionary<object, object>();
+            SingleRunList = new Dictionary<object, bool>();
         }
 
         public Binding(Binder.BindingResolver resolver)
         {
             this.Resolver = resolver;
             Binded = new Dictionary<object, object>();
+            SingleRunList = new Dictionary<object, bool>();
         }
 
         public Dictionary<object, object> Binded { get; private set; }
+
+        public Dictionary<object, bool> SingleRunList { get; private set; }
 
         public object Key { get; private set; }
 
@@ -40,5 +44,14 @@ namespace uGaMa.Bind
         }
 
         public IBinding To<T>() { return To(typeof(T)); }
+
+        public IBinding SingleRun()
+        {
+            if (!SingleRunList.ContainsKey(this.Key))
+            {
+                SingleRunList.Add(this.Key, false);
+            }
+            return this;
+        }
     }
 }

@@ -20,6 +20,11 @@ namespace uGaMa.Command
                 return;
             }
 
+            if (binding.SingleRunList.ContainsKey(param.Key))
+            {
+                if (binding.SingleRunList[param.Key]) return;
+            }
+
             var binded = binding.Binded;
 
             if (binded == null) return;
@@ -30,6 +35,14 @@ namespace uGaMa.Command
                 if (cmd == null) continue;
                 var command = (ICommand)Activator.CreateInstance(cmd);
                 command.Execute(param);
+            }
+
+            if (binding.SingleRunList.ContainsKey(param.Key))
+            {
+                if (!binding.SingleRunList[param.Key])
+                {
+                    binding.SingleRunList[param.Key] = true;
+                }
             }
         }
     }
