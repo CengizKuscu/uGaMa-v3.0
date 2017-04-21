@@ -32,7 +32,6 @@ namespace uGaMa.Core
 
         public void Awake()
         {
-            Debug.Log("gameManager Awake");
             _commandManager = new CommandBinder();
             _dispatcher = new DispatchManager();
             _contexts = new Dictionary<Type, IContext>();
@@ -52,7 +51,5 @@ namespace uGaMa.Core
         {
             _contexts.Remove(controller.GetType());
         }
-
-
     }
 }

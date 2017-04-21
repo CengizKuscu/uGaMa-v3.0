@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace uGaMa.Extensions
+namespace uGaMa.Extensions.Factory
 {
     public class ObjectFactory : MonoBehaviour
     {
