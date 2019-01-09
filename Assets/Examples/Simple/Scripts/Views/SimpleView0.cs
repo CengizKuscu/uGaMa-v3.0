@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 namespace Examples.Simple.Views
 {
-    public class SimpleView0 : View
+    public class SimpleView0 : View<SimpleView0>
     {
         public Text HelloWorldTxt;
         public Button GetSceneNameBtn;
         public Button ChangeSceneBtn;
 
-        public override void OnRegister()
+        protected override void OnRegister()
         {
             HelloWorldTxt.text = "Hello World!";
             
@@ -28,7 +28,7 @@ namespace Examples.Simple.Views
             HelloWorldTxt.text += "\n" + SceneManager.GetActiveScene().name;
         }
 
-        public override void OnRemove()
+        protected override void OnRemove()
         {
 
         }

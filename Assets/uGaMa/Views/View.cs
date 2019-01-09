@@ -6,49 +6,27 @@ using UnityEngine;
 
 namespace uGaMa.Views
 {
-    public class View : MonoBehaviour, IObserver
+    public abstract class View<T> : View where T : View<T>, IObserver
     {
-        GameManager _gameManager;
-
-        DispatchManager _dispatcher;
-
-        List<object> dispatchKeys = new List<object>();
-
-        internal GameManager gameManager
+        protected virtual void Awake()
         {
-            get
-            {
-                return _gameManager;
-            }
-        }
-
-        public DispatchManager Dispatcher
-        {
-            get
-            {
-                return _dispatcher;
-            }
-        }
-
-        public void Awake()
-        {
-            _gameManager = GameManager.Instance;
-            _dispatcher = _gameManager.Dispatcher;
             OnRegister();
         }
 
-        public void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            if (dispatchKeys.Count > 0)
-            {
-                Dispatcher.RemoveAllListeners(this);
-            }
             OnRemove();
         }
-
-        public virtual void OnRegister() { }
-        public virtual void OnRemove() { }
-
+        
+        protected virtual void OnRegister(){}
+        
+        protected virtual void OnRemove(){}
+    }
+    
+    public class View : MonoBehaviour, IObserver
+    {
+        List<object> dispatchKeys = new List<object>();
+        
         public List<object> DispatchKeys
         {
             get
@@ -60,6 +38,16 @@ namespace uGaMa.Views
         public void OnHandlerObserver(ObserverParam param, Action<ObserverParam> callBack)
         {
             callBack(param);
+        }
+
+        protected DispatchManager Dispatcher
+        {
+            get { return DispatchManager.Instance; }
+        }
+
+        protected GameManager gameManager
+        {
+            get { return GameManager.Instance; }
         }
     }
 }

@@ -5,16 +5,24 @@ using uGaMa.Core;
 
 namespace uGaMa.Observer
 {
-    public class DispatchManager
+    public class DispatchManager : Singleton<DispatchManager>
     {
-        GameManager _gameManager;
-
-        public Dictionary<object, Dictionary<Action<ObserverParam>, IObserver>> DispatchList;
-
-        public DispatchManager()
+        private GameManager gameManager
         {
-            _gameManager = GameManager.Instance;
-            DispatchList = new Dictionary<object, Dictionary<Action<ObserverParam>, IObserver>>();
+            get { return GameManager.Instance; }
+        }
+
+        private Dictionary<object, Dictionary<Action<ObserverParam>, IObserver>> _dispatchList; 
+
+        public Dictionary<object, Dictionary<Action<ObserverParam>, IObserver>> DispatchList
+        {
+            get
+            {
+                if(Instance._dispatchList == null)
+                    Instance._dispatchList = new Dictionary<object, Dictionary<Action<ObserverParam>, IObserver>>();
+
+                return Instance._dispatchList;
+            }
         }
 
         public void AddListener(IObserver obj, object dispatchKey, Action<ObserverParam> callBack)
@@ -36,6 +44,8 @@ namespace uGaMa.Observer
 
         public void RemoveListener(IObserver obj, object dispatchKey, Action<ObserverParam> callback)
         {
+            if (ApplicationIsQuitting) return;
+            
             var actions = DispatchList[dispatchKey];
             if (actions == null) return;
             for (int i = 0; i < actions.Count; i++)
@@ -55,6 +65,8 @@ namespace uGaMa.Observer
 
         public void RemoveAllListeners(IObserver obj)
         {
+            if (GameManager.ApplicationIsQuitting) return;
+            
             foreach (var dispatchKey in obj.DispatchKeys)
             {
                 var actions = DispatchList[dispatchKey];
@@ -78,21 +90,21 @@ namespace uGaMa.Observer
         public void Dispatch(object dispatchKey, object dispatchParam, object dispatchMsg)
         {
             var notify = new ObserverParam(dispatchKey, dispatchParam, dispatchMsg);
-            _gameManager.CommandMap.ExecuteCommand(notify);
+            gameManager.CommandMap.ExecuteCommand(notify);
             SendNotifyToObject(notify);
         }
 
         public void Dispatch(object dispatchKey, object dispatchParam)
         {
             var notify = new ObserverParam(dispatchKey, dispatchParam, null);
-            _gameManager.CommandMap.ExecuteCommand(notify);
+            gameManager.CommandMap.ExecuteCommand(notify);
             SendNotifyToObject(notify);
         }
 
         public void Dispatch(object dispatchKey)
         {
             var notify = new ObserverParam(dispatchKey, null, null);
-            _gameManager.CommandMap.ExecuteCommand(notify);
+            gameManager.CommandMap.ExecuteCommand(notify);
             SendNotifyToObject(notify);
         }
 

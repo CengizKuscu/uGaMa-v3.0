@@ -6,40 +6,36 @@ using UnityEngine;
 
 namespace uGaMa.Core
 {
-    [ScriptOrder(-10001)]
+    [ScriptOrder(-10002)]
     public partial class GameManager : Singleton<GameManager>
     {
-        private DispatchManager _dispatcher;
         private CommandBinder _commandManager;
 
         private Dictionary<Type, IContext> _contexts;
 
         public DispatchManager Dispatcher
         {
-            get
-            {
-                return _dispatcher;
-            }
+            get { return DispatchManager.Instance; }
         }
 
         public CommandBinder CommandMap
         {
             get
             {
-                return _commandManager;
+                if (Instance != null && Instance._commandManager == null)
+                    Instance._commandManager = new CommandBinder();
+                return Instance._commandManager;
             }
         }
 
         public void Awake()
         {
-            _commandManager = new CommandBinder();
-            _dispatcher = new DispatchManager();
             _contexts = new Dictionary<Type, IContext>();
         }
 
         internal T GetContext<T>()
         {
-            return (T)_contexts[typeof(T)];
+            return (T) _contexts[typeof(T)];
         }
 
         internal void AddContext(IContext controller)

@@ -23,15 +23,15 @@ namespace uGaMa.Core
                 if (_applicationIsQuitting)
                 {
                     Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
-                        "' already destroyed on application quit." +
-                        " Won't create again - returning null.");
+                                     "' already destroyed on application quit." +
+                                     " Won't create again - returning null.");
                     return null;
                 }
 
                 lock (Lock)
                 {
                     if (_instance != null) return _instance;
-                    _instance = (T)FindObjectOfType(typeof(T));
+                    _instance = (T) FindObjectOfType(typeof(T));
 
                     if (FindObjectsOfType(typeof(T)).Length > 1)
                     {
@@ -64,7 +64,13 @@ namespace uGaMa.Core
             }
         }
 
+        public static bool ApplicationIsQuitting
+        {
+            get { return _applicationIsQuitting; }
+        }
+
         private static bool _applicationIsQuitting = false;
+
         /// <summary>
         /// When Unity quits, it destroys objects in a random order.
         /// In principle, a Singleton is only destroyed when application quits.

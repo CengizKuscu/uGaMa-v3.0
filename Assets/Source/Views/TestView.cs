@@ -1,8 +1,10 @@
-﻿using uGaMa.Extensions.Pooling;
+﻿using Examples.Simple;
+using uGaMa.Extensions.Pooling;
+using uGaMa.Observer;
 using uGaMa.Views;
 using UnityEngine;
 
-public class TestView : View
+public class TestView : View<TestView>
 {
     private ObjectPool cubePool;
     private ObjectPool capsulePool;
@@ -11,17 +13,21 @@ public class TestView : View
 
     public GameObject poolCapsule;
 
-    public override void OnRegister()
+    protected override void OnRegister()
     {
-
-        //GameObject go = Resources.Load<GameObject>("Cube");
         cubePool = new ObjectPool("Cube", poolCube, 2, 5, false);
         capsulePool = new ObjectPool("Capsule", poolCapsule, 5, 10, false);
+        Dispatcher.AddListener(this, AppEvent.SetUp, OnSetUp);
     }
 
-    public override void OnRemove()
+    private void OnSetUp(ObserverParam obj)
     {
+        Debug.Log("OnSETUP");
+    }
 
+    protected override void OnRemove()
+    {
+        Dispatcher.RemoveAllListeners(this);
     }
 
     private void OnGUI()

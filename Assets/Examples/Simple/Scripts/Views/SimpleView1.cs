@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 namespace Examples.Simple.Views
 {
-    public class SimpleView1 : View
+    public class SimpleView1 : View<SimpleView1>
     {
         public GameObject CubeObj;
 
         public Text SceneNameTxt;
         public Button ChangeSceneBtn;
 
-        public override void OnRegister()
+        protected override void OnRegister()
         {
             SceneNameTxt.text = "Changed Scene\n"+SceneManager.GetActiveScene().name;
 
@@ -24,7 +24,7 @@ namespace Examples.Simple.Views
             Dispatcher.Dispatch(AppEvent.LoadScene, "Simple0");
         }
 
-        public override void OnRemove()
+        protected override void OnRemove()
         {
 
         }

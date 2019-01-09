@@ -8,14 +8,14 @@ namespace uGaMa.Core
     public class Context : MonoBehaviour, IContext
     {
         GameManager _gameManager;
-        DispatchManager _dispatcher;
+        //DispatchManager _dispatcher;
         CommandBinder _commandMap;
 
         internal GameManager gameManager
         {
             get
             {
-                return _gameManager;
+                return GameManager.Instance;
             }
         }
 
@@ -23,7 +23,7 @@ namespace uGaMa.Core
         {
             get
             {
-                return _dispatcher;
+                return DispatchManager.Instance;
             }
         }
 
@@ -31,22 +31,24 @@ namespace uGaMa.Core
         {
             get
             {
-                return _commandMap;
+                return GameManager.Instance.CommandMap;
             }
         }
 
         public void Awake()
         {
             _gameManager = GameManager.Instance;
-            _dispatcher = _gameManager.Dispatcher;
-            _commandMap = _gameManager.CommandMap;
-            _gameManager.AddContext(this);
+            //_dispatcher = DispatchManager.Instance;
+            _commandMap = CommandMap;
+            gameManager.AddContext(this);
             OnRegister();
         }
 
         public void OnDestroy()
         {
-            _gameManager.RemoveContext(this);
+            if (GameManager.ApplicationIsQuitting)
+                return;
+            gameManager.RemoveContext(this);
             OnRemove();
         }
 
