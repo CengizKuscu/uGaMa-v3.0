@@ -10,7 +10,7 @@ namespace Examples.Simple.Views
         public Button GetSceneNameBtn;
         public Button ChangeSceneBtn;
 
-        public override void OnRegister()
+        protected override void OnRegister()
         {
             HelloWorldTxt.text = "Hello World!";
             
@@ -28,7 +28,7 @@ namespace Examples.Simple.Views
             HelloWorldTxt.text += "\n" + SceneManager.GetActiveScene().name;
         }
 
-        public override void OnRemove()
+        protected override void OnRemove()
         {
 
         }

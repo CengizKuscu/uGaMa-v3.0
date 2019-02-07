@@ -11,7 +11,7 @@ public class TestView : View
 
     public GameObject poolCapsule;
 
-    public override void OnRegister()
+    protected override void OnRegister()
     {
 
         //GameObject go = Resources.Load<GameObject>("Cube");
@@ -19,7 +19,7 @@ public class TestView : View
         capsulePool = new ObjectPool("Capsule", poolCapsule, 5, 10, false);
     }
 
-    public override void OnRemove()
+    protected override void OnRemove()
     {
 
     }

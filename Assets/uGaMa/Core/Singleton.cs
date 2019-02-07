@@ -16,6 +16,11 @@ namespace uGaMa.Core
 
         private static readonly object Lock = new object();
 
+        private void OnApplicationQuit()
+        {
+            _applicationIsQuitting = true;
+        }
+
         public static T Instance
         {
             get
@@ -62,6 +67,11 @@ namespace uGaMa.Core
                     return _instance;
                 }
             }
+        }
+
+        public static bool IsApplicationQuit
+        {
+            get { return _applicationIsQuitting; }
         }
 
         private static bool _applicationIsQuitting = false;

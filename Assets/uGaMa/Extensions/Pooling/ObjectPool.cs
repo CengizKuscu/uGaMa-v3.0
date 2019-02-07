@@ -58,9 +58,13 @@ namespace uGaMa.Extensions.Pooling
                 //instantiate and create a game object with useless attributes.
                 //these should be reset anyways.
                 GameObject nObj = GameObject.Instantiate(obj, Vector3.zero, Quaternion.identity) as GameObject;
+                
                 //set parent
                 nObj.transform.SetParent(poolingTarget.transform);
-
+                
+                nObj.transform.localScale = Vector3.one;
+                nObj.transform.localPosition = Vector3.zero;
+                
                 //make sure the object isn't active
                 nObj.SetActive(false);
 
@@ -95,6 +99,9 @@ namespace uGaMa.Extensions.Pooling
                 GameObject nObj = GameObject.Instantiate(go, Vector3.zero, Quaternion.identity) as GameObject;
                 //set parent
                 nObj.transform.SetParent(poolingTarget.transform);
+                
+                nObj.transform.localScale = Vector3.one;
+                nObj.transform.localPosition = Vector3.zero;
 
                 //make sure the object isn't active
                 nObj.SetActive(false);
@@ -143,6 +150,9 @@ namespace uGaMa.Extensions.Pooling
                 GameObject nObj = GameObject.Instantiate(pooledObj, Vector3.zero, Quaternion.identity) as GameObject;
                 //Set Parent
                 nObj.transform.SetParent(poolingTarget.transform);
+                
+                nObj.transform.localScale = Vector3.one;
+                nObj.transform.localPosition = Vector3.zero;
                 //set it to active since we are about to use it.
                 nObj.SetActive(true);
                 //add it to the pool of objects
@@ -152,6 +162,14 @@ namespace uGaMa.Extensions.Pooling
             }
 
             return null;
+        }
+
+        public void HideAllObjects()
+        {
+            foreach (var o in pooledObjects)
+            {
+                o.SetActive(false);
+            }
         }
 
         /// <summary>
