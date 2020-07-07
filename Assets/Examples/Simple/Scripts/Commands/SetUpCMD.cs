@@ -10,7 +10,7 @@ namespace Examples.Simple.Commands
         {
             Debug.Log("SetUpCMD is Running");
 
-            gameManager.CommandMap.Bind(AppEvent.LoadScene).To<LoadSceneCMD>();
+            Dispatcher.CommandMap.Bind(AppEvent.LoadScene).To<LoadSceneCMD>();
 
             Debug.Log("SetupCmd is Complete");
         }

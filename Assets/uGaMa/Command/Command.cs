@@ -11,7 +11,6 @@ namespace uGaMa.Command
         public Command()
         {
             _gameManager = GameManager.Instance;
-            _dispatcher = _gameManager.Dispatcher;
         }
 
         internal GameManager gameManager
@@ -26,7 +25,7 @@ namespace uGaMa.Command
         {
             get
             {
-                return _dispatcher;
+                return DispatchManager.Instance;
             }
         }
 

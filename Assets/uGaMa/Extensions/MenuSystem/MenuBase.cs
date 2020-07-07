@@ -1,22 +1,40 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using uGaMa.Core;
+using uGaMa.Extensions.MenuSystem;
 using uGaMa.Observer;
 using uGaMa.Views;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace uGaMa.Views
+namespace uGaMa.Extensions.MenuSystem
 {
-    public abstract class AbsView : MonoBehaviour, IObserver
+    public abstract class AbsMenu : MonoBehaviour, IObserver
     {
+        public string menuName;
+        public string prevMenuName;
+        
         List<object> dispatchKeys = new List<object>();
 
+        [SerializeField] private bool isPopup;
+
         [SerializeField] private bool autoRemoveDispatches;
+
+        [SerializeField] private bool destroyOnClose;
+
+        public bool IsPopup
+        {
+            get { return isPopup; }
+        }
 
         public bool AutoRemoveDispatches
         {
             get { return autoRemoveDispatches; }
+        }
+
+        public bool DestroyOnClose
+        {
+            get { return destroyOnClose; }
         }
 
         public List<object> DispatchKeys
@@ -39,47 +57,47 @@ namespace uGaMa.Views
             get { return DispatchManager.Instance; }
         }
 
-        protected virtual void Awake(){}
-        
-        protected virtual void OnEnable(){}
-        
-        protected virtual void OnDisable(){}
-        
-        protected virtual void OnDestroy(){}
+        protected abstract void OnShowBefore(object param);
+        protected abstract void OnShowAfter(object param);
+        protected abstract void OnHideBefore(object param);
 
-        protected abstract void OnRegister();
-
-        protected abstract void OnRemove();        
+        protected abstract void OnHideAfter(object param);    
     }
 
 
-    public class View : AbsView
+    public partial class MenuBase : AbsMenu
     {
-        protected override void Awake()
+        protected override void OnShowBefore(object param)
         {
-            OnRegister();
         }
 
-        protected override void OnDestroy()
+        protected override void OnShowAfter(object param)
+        {
+        }
+
+        protected override void OnHideBefore(object param)
+        {
+        }
+
+        protected override void OnHideAfter(object param)
+        {
+        }
+
+        public void Open(object param = null)
+        {
+            OnShowBefore(param);
+            gameObject.SetActive(true);
+            OnShowAfter(param);
+        }
+
+        public void Close(object param = null)
         {
             RemoveDispatches();
-            OnRemove();
+            OnHideBefore(param);
+            gameObject.SetActive(false);
+            OnHideAfter(param);
         }
-
-        protected override void OnDisable()
-        {
-            RemoveDispatches();
-            OnRemove();
-        }
-
-        protected override void OnRegister()
-        {
-        }
-
-        protected override void OnRemove()
-        {
-        }
-
+        
         private void RemoveDispatches()
         {
             if (DispatchManager.IsApplicationQuit)
@@ -97,5 +115,5 @@ namespace uGaMa.Views
                 return;
             Dispatcher.RemoveAllListeners(this);
         }
-    }   
+    }
 }
