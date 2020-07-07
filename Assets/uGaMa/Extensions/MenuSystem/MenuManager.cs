@@ -22,11 +22,12 @@ namespace uGaMa.Extensions.MenuSystem
     [ScriptOrder(-15000)]
     public partial class MenuManager : MonoBehaviour
     {
+        [SerializeField] private string menuPrefabFolder = "Menus";
         [SerializeField] private Transform menuRoot;
         [SerializeField] private Transform popupRoot;
         [SerializeField] private List<MenuBase> activeList;
 
-        [SerializeField] private MenuBase starterMenu;
+        //[SerializeField] private MenuBase starterMenu;
 
         private string currentMenuName;
         private string prevMenuName;
@@ -87,7 +88,7 @@ namespace uGaMa.Extensions.MenuSystem
             }
             else
             {
-                GameObject load = Resources.Load<GameObject>("Menus/" + menuName);
+                GameObject load = Resources.Load<GameObject>(Instance.menuPrefabFolder+"/" + menuName);
 
                 if (load == null)
                     return;
