@@ -70,10 +70,6 @@ namespace uGaMa.Extensions.MenuSystem
             {
                 go.gameObject.SetActive(false);
             }
-
-            /*instance.currentMenuName = starterMenu.menuName;
-            instance.prevMenuName = starterMenu.menuName;*/
-            //starterMenu.Open();
         }
 
         public static void OpenMenu(string menuName, MenuMode menuMode = MenuMode.Single, object param = null)
@@ -85,36 +81,34 @@ namespace uGaMa.Extensions.MenuSystem
 
             if (menu != null)
             {
+                DispatchManager.Instance.Dispatch(MenuManagerEvent.OpenMenu, menuName);
                 if (menu.gameObject.activeSelf)
                     return;
             }
             else
             {
-                //instance.LoadMenu(menuName, menuMode, param);
                 GameObject load = Resources.Load<GameObject>("Menus/" + menuName);
 
-                if(load == null)
+                if (load == null)
                     return;
 
                 MenuBase tmp = load.GetComponent<MenuBase>();
 
                 Transform root = tmp.IsPopup ? instance.popupRoot : instance.menuRoot;
-              
+
                 GameObject go = Instantiate(load, root);
                 menu = go.GetComponent<MenuBase>();
                 instance.activeList.Add(menu);
                 DispatchManager.Instance.Dispatch(MenuManagerEvent.OpenMenu, menuName);
             }
-            
+
             instance.prevMenuName = instance.currentMenuName;
             instance.currentMenuName = menuName;
             menu.Open(param);
             RectTransform rectTransform = menu.GetComponent<RectTransform>();
             if (rectTransform != null)
                 rectTransform.SetAsLastSibling();
-        } 
-
-        
+        }
 
         public static void CloseMenu(string menuName = null, object param = null)
         {
@@ -154,7 +148,6 @@ namespace uGaMa.Extensions.MenuSystem
                 instance.activeList.Remove(menu);
                 Destroy(menu.gameObject);
             }
-                
         }
     }
 }
